@@ -3,9 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game</title>
+    <title>Movie Quiz</title>
   </head>
   <body>
-    <h2>Hello Game</h2>
+    <div id="quiz">
+      <div id="backdrop"><img src="" alt="" /></div>
+      <div id="title"></div>
+    </div>
+    <div id="answer">
+      <input type="text" id="inputWord" />
+    </div>
+    <div id="score"></div>
+    <div id="timer"></div>
+    <script>
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkN2Q2YjQzNmMyYWFmYmI5MDM0NTJkYjYyMjNkOWU2NiIsInN1YiI6IjYzMGQ2ZTllYmJjYWUwMDA3ZTQ5NmM5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ozHtkrnpGYvv65bpT_Om4cKN8H9NyxzOduQynHzk0xE',
+        },
+      };
+
+      const quiz = document.querySelector('#quiz');
+      const inputWord = document.querySelector('#inputWord');
+      const score = document.querySelector('#score');
+      const timer = document.querySelector('#timer');
+
+      //random page //random num (0-19)
+      fetch('https://api.themoviedb.org/4/account/630d6e9ebbcae0007e496c96/movie/recommendations?page=4&language=en-US', options)
+        .then((response) => response.json())
+        .then((response) => {
+          let movieData = response.results;
+          document.querySelector('#quiz #backdrop img').src = movieData
+            .filter((el, idx) => idx === 0)
+            .map((el) => `https://image.tmdb.org/t/p/w780/${el.backdrop_path}`);
+          document.querySelector('#quiz #title').innerHTML = movieData.filter((el, idx) => idx === 0).map((el) => el.title);
+          console.log(movieData);
+        })
+        .catch((err) => console.error(err));
+    </script>
   </body>
 </html>
