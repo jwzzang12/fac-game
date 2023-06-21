@@ -25,23 +25,65 @@
         },
       };
 
-      const quiz = document.querySelector('#quiz');
+      const quiz = document.querySelector('#quiz #backdrop img');
       const inputWord = document.querySelector('#inputWord');
       const score = document.querySelector('#score');
       const timer = document.querySelector('#timer');
 
-      //random page //random num (0-19)
-      fetch('https://api.themoviedb.org/4/account/630d6e9ebbcae0007e496c96/movie/recommendations?page=4&language=en-US', options)
-        .then((response) => response.json())
-        .then((response) => {
-          let movieData = response.results;
-          document.querySelector('#quiz #backdrop img').src = movieData
-            .filter((el, idx) => idx === 0)
-            .map((el) => `https://image.tmdb.org/t/p/w780/${el.backdrop_path}`);
-          document.querySelector('#quiz #title').innerHTML = movieData.filter((el, idx) => idx === 0).map((el) => el.title);
-          console.log(movieData);
-        })
-        .catch((err) => console.error(err));
+      let answer = '';
+      let randomNum = 0;
+      let count = 0;
+
+      const randomNumFunc = () => {
+        randomNum = Math.floor(Math.random() * 19 + 1);
+      };
+
+      String.prototype.toWesternDigits = function () {
+        return this.replace('III', '3').replace('II', '2').replace('I', '1');
+      };
+
+      const keyupFunc = function (e) {
+        if (e.keyCode === 13) {
+          const typed = inputWord.value;
+          if (answer[0].toLowerCase() == typed.toLowerCase()) {
+            console.log(answer[0].toLowerCase().toWesternDigits());
+            console.log('correct');
+            init();
+            count++;
+            score.textContent = count;
+          } else {
+            //game end and show answer
+          }
+        }
+      };
+
+      const init = function () {
+        inputWord.addEventListener('keyup', keyupFunc);
+        randomNumFunc();
+        getMovieData();
+        inputWord.value = '';
+        inputWord.focus();
+      };
+
+      //timer function
+      //7 seconds, pass time -> lose
+
+      async function getMovieData() {
+        let obj;
+        const res = await fetch('https://api.themoviedb.org/4/account/630d6e9ebbcae0007e496c96/movie/recommendations?page=4&language=en-US', options);
+
+        obj = await res.json();
+
+        let movieData = obj.results;
+
+        quiz.src = movieData.filter((el, idx) => idx === randomNum).map((el) => `https://image.tmdb.org/t/p/w780/${el.backdrop_path}`);
+
+        answer = movieData.filter((el, idx) => idx === randomNum).map((el) => el.title.toWesternDigits());
+        document.querySelector('#quiz #title').textContent = movieData.filter((el, idx) => idx === randomNum).map((el) => el.title);
+      }
+
+      getMovieData();
+      init();
     </script>
   </body>
 </html>
