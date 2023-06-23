@@ -6,15 +6,17 @@
     <title>Movie Quiz</title>
   </head>
   <body>
+    <header><h1>Movie Quiz</h1></header>
     <div id="quiz">
       <div id="backdrop"><img src="" alt="" /></div>
-      <div id="title"></div>
+      <div id="title" style="display: none"></div>
     </div>
-    <div id="answer">
+    <div id="inputBox">
       <input type="text" id="inputWord" />
     </div>
     <div id="score"></div>
     <div id="timer"></div>
+    <div id="restart"><button>Try again</button></div>
     <script>
       const options = {
         method: 'GET',
@@ -28,31 +30,32 @@
       const quiz = document.querySelector('#quiz #backdrop img');
       const inputWord = document.querySelector('#inputWord');
       const score = document.querySelector('#score');
-      const timer = document.querySelector('#timer');
+      const title = document.querySelector('#title');
+      // const timer = document.querySelector('#timer');
+      const restart = document.querySelector('#restart');
 
       let answer = '';
       let randomNum = 0;
       let count = 0;
 
-      const randomNumFunc = () => {
-        randomNum = Math.floor(Math.random() * 19 + 1);
+      String.prototype.toWesternDigits = function () {
+        return this.replace('III', '3').replace('II', '2');
       };
 
-      String.prototype.toWesternDigits = function () {
-        return this.replace('III', '3').replace('II', '2').replace('I', '1');
+      const randomNumFunc = () => {
+        randomNum = Math.floor(Math.random() * 19);
       };
 
       const keyupFunc = function (e) {
         if (e.keyCode === 13) {
           const typed = inputWord.value;
           if (answer[0].toLowerCase() == typed.toLowerCase()) {
-            console.log(answer[0].toLowerCase().toWesternDigits());
-            console.log('correct');
             init();
             count++;
             score.textContent = count;
           } else {
-            //game end and show answer
+            inputWord.disabled = true;
+            title.style.display = 'block';
           }
         }
       };
@@ -65,21 +68,30 @@
         inputWord.focus();
       };
 
+      restart.addEventListener('click', init);
       //timer function
       //7 seconds, pass time -> lose
 
       async function getMovieData() {
-        let obj;
-        const res = await fetch('https://api.themoviedb.org/4/account/630d6e9ebbcae0007e496c96/movie/recommendations?page=4&language=en-US', options);
+        try {
+          let obj;
+          const res = await fetch(
+            'https://api.themoviedb.org/4/account/630d6e9ebbcae0007e496c96/movie/recommendations?page=4&language=en-US',
+            options
+          );
+          obj = await res.json();
+          let movieData = obj.results;
 
-        obj = await res.json();
+          quiz.src = movieData.filter((el, idx) => idx === randomNum).map((el) => `https://image.tmdb.org/t/p/w780/${el.backdrop_path}`);
 
-        let movieData = obj.results;
+          answer = movieData.filter((el, idx) => idx === randomNum).map((el) => el.title.toWesternDigits());
 
-        quiz.src = movieData.filter((el, idx) => idx === randomNum).map((el) => `https://image.tmdb.org/t/p/w780/${el.backdrop_path}`);
+          title.textContent = movieData.filter((el, idx) => idx === randomNum).map((el) => el.title);
 
-        answer = movieData.filter((el, idx) => idx === randomNum).map((el) => el.title.toWesternDigits());
-        document.querySelector('#quiz #title').textContent = movieData.filter((el, idx) => idx === randomNum).map((el) => el.title);
+          console.log(answer[0].toWesternDigits());
+        } catch (err) {
+          console.log(err);
+        }
       }
 
       getMovieData();
