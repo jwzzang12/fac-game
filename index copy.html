@@ -17,17 +17,17 @@
     <span class="material-symbols-outlined" id="info"> info </span>
     <div id="start" class="left">
       <div id="quizCountdown"></div>
+      <div id="startBtn"><button>Start</button></div>
     </div>
     <div id="quiz" class="left">
       <div id="backdrop"><img src="" alt="" /></div>
-      <div id="guessWhat">?</div>
+      <div>?</div>
       <div id="titleBox">
         The answer is
         <div id="title"></div>
       </div>
     </div>
     <div id="answerBox" class="right">
-      <div id="startBtn"><button>Start</button></div>
       <div id="lose">LOSE!</div>
       <div id="inputBox">
         <input type="text" id="inputWord" />
@@ -37,7 +37,7 @@
         <span>Your Score : </span>
         <span id="score">0</span>
       </div>
-      <div id="restartBtn"><button>Try again</button></div>
+      <div id="restart"><button>Try again</button></div>
     </div>
 
     <script>
@@ -55,12 +55,10 @@
 
       const inputWord = document.querySelector('#inputWord');
       const score = document.querySelector('#score');
-      const guessWhat = document.querySelector('#guessWhat');
       const titleBox = document.querySelector('#titleBox');
       const title = document.querySelector('#title');
       // const timer = document.querySelector('#timer');
-      const restartBtn = document.querySelector('#restartBtn');
-      const startBtn = document.querySelector('#startBtn');
+      const restart = document.querySelector('#restart');
 
       let answer = '';
       let randomNum = 0;
@@ -85,8 +83,7 @@
             inputWord.disabled = true;
             titleBox.style.display = 'block';
             lose.style.display = 'block';
-            restartBtn.style.display = 'block';
-            guessWhat.style.display = 'none';
+            restart.style.display = 'block';
           }
         }
       };
@@ -98,17 +95,6 @@
         inputWord.value = '';
         inputWord.focus();
       };
-      const prevtimer = () => {
-        alert('Hello');
-      };
-
-      const start = () => {
-        init();
-        startBtn.style.display = 'none';
-
-        setTimeout(prevtimer, 3000);
-      };
-      startBtn.addEventListener('click', start);
 
       const reset = () => {
         init();
@@ -117,10 +103,9 @@
         inputWord.disabled = false;
         titleBox.style.display = 'none';
         lose.style.display = 'none';
-        restartBtn.style.display = 'none';
-        guessWhat.style.display = 'block';
+        restart.style.display = 'none';
       };
-      restartBtn.addEventListener('click', reset);
+      restart.addEventListener('click', reset);
       //timer function
       //7 seconds, pass time -> lose
 
