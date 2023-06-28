@@ -15,7 +15,10 @@
   </head>
   <body>
     <span class="material-symbols-outlined" id="info"> info </span>
-    <div id="prevTimer" class="left"></div>
+    <div id="rule" class="left">
+      <div id="desc">How to play</div>
+      <div id="startBtn"><button>Start</button></div>
+    </div>
     <div id="quiz" class="left">
       <div id="backdrop"><img src="" alt="" /></div>
       <div id="guessWhat">?</div>
@@ -25,12 +28,11 @@
       </div>
     </div>
     <div id="answerBox" class="right">
-      <div id="startBtn"><button>Start</button></div>
       <div id="lose">LOSE!</div>
+      <div id="timer">7</div>
       <div id="inputBox">
         <input type="text" id="inputWord" />
       </div>
-      <div id="timer"></div>
       <div id="scoreBox">
         <span>Your Score : </span>
         <span id="score">0</span>
@@ -51,7 +53,6 @@
       const quiz = document.querySelector('#quiz');
       const quizImg = document.querySelector('#quiz #backdrop img');
       const lose = document.querySelector('#lose');
-
       const inputWord = document.querySelector('#inputWord');
       const score = document.querySelector('#score');
       const guessWhat = document.querySelector('#guessWhat');
@@ -59,15 +60,41 @@
       const title = document.querySelector('#title');
       const restartBtn = document.querySelector('#restartBtn');
       const startBtn = document.querySelector('#startBtn');
-      const prevTimer = document.querySelector('#prevTimer');
+      const rule = document.querySelector('#rule');
       const timer = document.querySelector('#timer');
 
       let answer = '';
       let randomNum = 0;
       let count = 0;
 
+      let timeleft = 7;
+
       String.prototype.toWesternDigits = function () {
         return this.replace('III', '3').replace('II', '2');
+      };
+
+      let countdown = 7;
+
+      const stopTimer = () => {
+        clearInterval(countdown);
+        titleBox.style.display = 'block';
+        lose.style.display = 'block';
+        restartBtn.style.display = 'block';
+        guessWhat.style.display = 'none';
+      };
+
+      const quizTimer = () => {
+        countdown = setInterval(() => {
+          if (timeleft <= 0) {
+            stopTimer();
+            inputWord.disabled = true;
+            timer.innerHTML = timeleft;
+          } else {
+            timer.innerHTML = timeleft;
+            console.log(timeleft);
+          }
+          timeleft -= 1;
+        }, 1000);
       };
 
       const randomNumFunc = () => {
@@ -78,15 +105,13 @@
         if (e.keyCode === 13) {
           const typed = inputWord.value;
           if (answer[0].toLowerCase() == typed.toLowerCase()) {
+            getMovieData();
             init();
             count++;
             score.textContent = count;
           } else {
+            stopTimer();
             inputWord.disabled = true;
-            titleBox.style.display = 'block';
-            lose.style.display = 'block';
-            restartBtn.style.display = 'block';
-            guessWhat.style.display = 'none';
           }
         }
       };
@@ -94,32 +119,21 @@
       const init = () => {
         inputWord.addEventListener('keyup', keyupFunc);
         randomNumFunc();
-        getMovieData();
         inputWord.value = '';
         inputWord.focus();
+        quizTimer();
       };
 
-      let timeleft = 3;
-
-      const start = () => {
+      const startFunc = () => {
         init();
         startBtn.style.display = 'none';
-        const startTimer = setInterval(function () {
-          if (timeleft <= 0) {
-            clearInterval(startTimer);
-            prevTimer.style.display = 'none';
-            quiz.style.display = 'flex';
-          } else {
-            prevTimer.innerHTML = timeleft;
-          }
-          timeleft--;
-        }, 1000);
+        rule.style.display = 'none';
+        quiz.style.display = 'flex';
       };
+      startBtn.addEventListener('click', startFunc);
 
-      startBtn.addEventListener('click', start);
-
-      const reset = () => {
-        init();
+      const restartFunc = () => {
+        timeleft = 7;
         count = 0;
         score.textContent = count;
         inputWord.disabled = false;
@@ -127,10 +141,11 @@
         lose.style.display = 'none';
         restartBtn.style.display = 'none';
         guessWhat.style.display = 'block';
+
+        getMovieData();
+        init();
       };
-      restartBtn.addEventListener('click', reset);
-      //timer function
-      //7 seconds, pass time -> lose
+      restartBtn.addEventListener('click', restartFunc);
 
       async function getMovieData() {
         try {

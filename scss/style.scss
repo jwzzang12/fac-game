@@ -62,18 +62,19 @@ body {
     color: $white;
   }
 }
-#start {
-  display: block;
+#rule {
+  display: flex;
+}
+#desc {
+  margin-bottom: 1rem;
 }
 #startBtn {
-  font-size: 30px;
-  background-color: $grey;
   display: inline-block;
   padding: 5px 10px;
-  border-radius: 3px;
+  font-size: 30px;
   color: #111;
-  position: absolute;
-  top: 8rem;
+  background-color: $grey;
+  border-radius: 3px;
 }
 #quiz {
   display: none;
@@ -97,6 +98,10 @@ body {
   overflow: hidden;
   margin-bottom: 10px;
   border-radius: 10px;
+}
+#timer {
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
 }
 #inputBox {
   width: 100%;
