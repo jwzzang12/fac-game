@@ -15,9 +15,7 @@
   </head>
   <body>
     <span class="material-symbols-outlined" id="info"> info </span>
-    <div id="start" class="left">
-      <div id="quizCountdown"></div>
-    </div>
+    <div id="prevTimer" class="left"></div>
     <div id="quiz" class="left">
       <div id="backdrop"><img src="" alt="" /></div>
       <div id="guessWhat">?</div>
@@ -50,7 +48,8 @@
         },
       };
 
-      const quiz = document.querySelector('#quiz #backdrop img');
+      const quiz = document.querySelector('#quiz');
+      const quizImg = document.querySelector('#quiz #backdrop img');
       const lose = document.querySelector('#lose');
 
       const inputWord = document.querySelector('#inputWord');
@@ -58,9 +57,10 @@
       const guessWhat = document.querySelector('#guessWhat');
       const titleBox = document.querySelector('#titleBox');
       const title = document.querySelector('#title');
-      // const timer = document.querySelector('#timer');
       const restartBtn = document.querySelector('#restartBtn');
       const startBtn = document.querySelector('#startBtn');
+      const prevTimer = document.querySelector('#prevTimer');
+      const timer = document.querySelector('#timer');
 
       let answer = '';
       let randomNum = 0;
@@ -98,16 +98,24 @@
         inputWord.value = '';
         inputWord.focus();
       };
-      const prevtimer = () => {
-        alert('Hello');
-      };
+
+      let timeleft = 3;
 
       const start = () => {
         init();
         startBtn.style.display = 'none';
-
-        setTimeout(prevtimer, 3000);
+        const startTimer = setInterval(function () {
+          if (timeleft <= 0) {
+            clearInterval(startTimer);
+            prevTimer.style.display = 'none';
+            quiz.style.display = 'flex';
+          } else {
+            prevTimer.innerHTML = timeleft;
+          }
+          timeleft--;
+        }, 1000);
       };
+
       startBtn.addEventListener('click', start);
 
       const reset = () => {
@@ -134,7 +142,7 @@
           obj = await res.json();
           let movieData = obj.results;
 
-          quiz.src = movieData.filter((el, idx) => idx === randomNum).map((el) => `https://image.tmdb.org/t/p/w780/${el.backdrop_path}`);
+          quizImg.src = movieData.filter((el, idx) => idx === randomNum).map((el) => `https://image.tmdb.org/t/p/w780/${el.backdrop_path}`);
 
           answer = movieData.filter((el, idx) => idx === randomNum).map((el) => el.title.toWesternDigits());
 
@@ -145,9 +153,7 @@
           console.log(err);
         }
       }
-
       getMovieData();
-      init();
     </script>
   </body>
 </html>
