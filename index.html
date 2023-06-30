@@ -66,6 +66,7 @@
 
       const quiz = document.querySelector('#quiz');
       const quizImg = document.querySelector('#quiz #backdrop img');
+
       const lose = document.querySelector('#lose');
       const inputWord = document.querySelector('#inputWord');
       const score = document.querySelector('#score');
@@ -76,6 +77,7 @@
       const startBtn = document.querySelector('#startBtn');
       const start = document.querySelector('#start');
       const timer = document.querySelector('#timer');
+
       const rule = document.querySelector('#rule');
       const info = document.querySelector('#info');
       const closeBtn = document.querySelector('#closeBtn');
@@ -83,7 +85,6 @@
       let answer = '';
       let randomNum = 0;
       let count = 0;
-
       let timeleft = 7;
 
       String.prototype.toWesternDigits = function () {
@@ -117,7 +118,6 @@
             timer.innerHTML = timeleft;
           } else {
             timer.innerHTML = timeleft;
-            console.log(timeleft);
           }
           timeleft -= 1;
         }, 1000);

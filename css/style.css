@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Fredoka", sans-serif;
+  font-family: 'Fredoka', sans-serif;
   box-sizing: border-box;
   cursor: default;
   text-align: center;
@@ -28,7 +28,8 @@ body {
   font-size: 20px;
   background: #002b5b;
 }
-body .container {
+
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,11 +41,11 @@ body .container {
   padding: 1vw;
   background-color: rgba(249, 245, 235, 0.8);
 }
-body .container.left {
+.container.left {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
-body .container.right {
+.container.right {
   color: #f9f5eb;
   background-color: rgba(249, 245, 235, 0.5);
   border-top-right-radius: 10px;
