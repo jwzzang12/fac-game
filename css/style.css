@@ -60,6 +60,7 @@ body {
   position: absolute;
   top: 1rem;
   right: 1rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #e4dccf;
 }
@@ -90,9 +91,9 @@ body {
   margin-bottom: 3rem;
 }
 #desc p:nth-child(4) {
-  text-align: center;
-  color: #002b5b;
   font-weight: 600;
+  color: #002b5b;
+  text-align: center;
 }
 
 #closeBtn {
@@ -184,11 +185,11 @@ body {
 }
 @keyframes popup {
   0% {
-    opacity: 0;
     transform: translateY(200%);
+    opacity: 0;
   }
   100% {
-    opacity: 1;
     transform: translateY(0);
+    opacity: 1;
   }
 }
