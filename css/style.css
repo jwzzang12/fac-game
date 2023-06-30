@@ -28,7 +28,7 @@ body {
   font-size: 20px;
   background: #002b5b;
 }
-body > div {
+body .container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,15 +40,19 @@ body > div {
   padding: 1vw;
   background-color: rgba(249, 245, 235, 0.8);
 }
-body > div.left {
+body .container.left {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
-body > div.right {
+body .container.right {
   color: #f9f5eb;
   background-color: rgba(249, 245, 235, 0.5);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
 }
 
 #info {
@@ -63,11 +67,43 @@ body > div.right {
 }
 
 #rule {
-  display: flex;
+  display: none;
+  width: 50%;
+  position: absolute;
+  z-index: 100;
+  padding: 1vw;
+  font-size: 18px;
+  background: rgba(249, 245, 235, 0.9);
+  border-radius: 10px;
+  animation: popup 0.5s ease-out;
 }
 
 #desc {
   margin-bottom: 1rem;
+}
+#desc p {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+#desc p:nth-child(3) {
+  margin-bottom: 3rem;
+}
+#desc p:nth-child(4) {
+  text-align: center;
+  color: #002b5b;
+  font-weight: 600;
+}
+
+#closeBtn {
+  display: inline-block;
+  padding: 5px;
+  color: #f9f5eb;
+  background: #ea5455;
+  border-radius: 3px;
+}
+
+#start {
+  display: flex;
 }
 
 #startBtn {
@@ -75,8 +111,12 @@ body > div.right {
   padding: 5px 10px;
   font-size: 30px;
   color: #111;
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 300% 300%;
   background-color: #e4dccf;
   border-radius: 3px;
+  animation: gradient 15s ease infinite;
 }
 
 #quiz {
@@ -128,4 +168,26 @@ body > div.right {
   font-size: 22px;
   font-weight: 500;
   color: #002b5b;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes popup {
+  0% {
+    opacity: 0;
+    transform: translateY(200%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

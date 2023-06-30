@@ -15,11 +15,25 @@
   </head>
   <body>
     <span class="material-symbols-outlined" id="info"> info </span>
-    <div id="rule" class="left">
-      <div id="desc">How to play</div>
-      <div id="startBtn"><button>Start</button></div>
+    <div id="rule">
+      <div id="desc">
+        <p>🎥 Welcome to the Movie Quiz! Get ready to unleash your inner movie buff and embark on a hilarious guessing adventure!</p>
+        <p>
+          ⏳ Your mission, should you choose to accept it (and you totally should), is to type in the title of the movie before the clock ticks down
+          to its final beat. Tick-tock, time is of the essence!
+        </p>
+        <p>
+          🚨 Whether it's upper or lower case, it doesn't matter! But here's the deal: if you dare to type the wrong answer or hesitate for too long,
+          brace yourself!
+        </p>
+        <p>Ready? Set? Start the madness and show us your movie mojo!</p>
+        <div id="closeBtn" class="btn"><button>Close</button></div>
+      </div>
     </div>
-    <div id="quiz" class="left">
+    <div id="start" class="left container">
+      <div id="startBtn" class="btn"><button>Start</button></div>
+    </div>
+    <div id="quiz" class="left container">
       <div id="backdrop"><img src="" alt="" /></div>
       <div id="guessWhat">?</div>
       <div id="titleBox">
@@ -27,17 +41,17 @@
         <div id="title"></div>
       </div>
     </div>
-    <div id="answerBox" class="right">
+    <div id="answerBox" class="right container">
       <div id="lose">LOSE!</div>
       <div id="timer">7</div>
       <div id="inputBox">
-        <input type="text" id="inputWord" />
+        <input type="text" id="inputWord" disabled />
       </div>
       <div id="scoreBox">
         <span>Your Score : </span>
         <span id="score">0</span>
       </div>
-      <div id="restartBtn"><button>Try again</button></div>
+      <div id="restartBtn" class="btn"><button>Try again</button></div>
     </div>
 
     <script>
@@ -60,8 +74,11 @@
       const title = document.querySelector('#title');
       const restartBtn = document.querySelector('#restartBtn');
       const startBtn = document.querySelector('#startBtn');
-      const rule = document.querySelector('#rule');
+      const start = document.querySelector('#start');
       const timer = document.querySelector('#timer');
+      const rule = document.querySelector('#rule');
+      const info = document.querySelector('#info');
+      const closeBtn = document.querySelector('#closeBtn');
 
       let answer = '';
       let randomNum = 0;
@@ -73,7 +90,14 @@
         return this.replace('III', '3').replace('II', '2');
       };
 
-      let countdown = 7;
+      const showRuleFunc = () => {
+        rule.style.display = 'block';
+      };
+      const closeRuleFunc = () => {
+        rule.style.display = 'none';
+      };
+      info.addEventListener('click', showRuleFunc);
+      closeBtn.addEventListener('click', closeRuleFunc);
 
       const stopTimer = () => {
         clearInterval(countdown);
@@ -82,6 +106,8 @@
         restartBtn.style.display = 'block';
         guessWhat.style.display = 'none';
       };
+
+      let countdown;
 
       const quizTimer = () => {
         countdown = setInterval(() => {
@@ -102,11 +128,15 @@
       };
 
       const keyupFunc = (e) => {
+        const typed = inputWord.value;
+        if (e.keyCode === 13 && !typed) {
+          return;
+        }
         if (e.keyCode === 13) {
-          const typed = inputWord.value;
+          clearInterval(countdown);
           if (answer[0].toLowerCase() == typed.toLowerCase()) {
-            getMovieData();
             init();
+            getMovieData();
             count++;
             score.textContent = count;
           } else {
@@ -117,6 +147,7 @@
       };
 
       const init = () => {
+        timeleft = 7;
         inputWord.addEventListener('keyup', keyupFunc);
         randomNumFunc();
         inputWord.value = '';
@@ -125,15 +156,17 @@
       };
 
       const startFunc = () => {
-        init();
+        inputWord.disabled = false;
         startBtn.style.display = 'none';
-        rule.style.display = 'none';
+        start.style.display = 'none';
         quiz.style.display = 'flex';
+        init();
       };
       startBtn.addEventListener('click', startFunc);
 
       const restartFunc = () => {
-        timeleft = 7;
+        init();
+        getMovieData();
         count = 0;
         score.textContent = count;
         inputWord.disabled = false;
@@ -141,9 +174,6 @@
         lose.style.display = 'none';
         restartBtn.style.display = 'none';
         guessWhat.style.display = 'block';
-
-        getMovieData();
-        init();
       };
       restartBtn.addEventListener('click', restartFunc);
 
