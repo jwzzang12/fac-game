@@ -9,6 +9,7 @@
 
 button {
   all: unset;
+  cursor: pointer;
 }
 
 img {
@@ -63,6 +64,7 @@ body {
   font-size: 2rem;
   font-weight: 700;
   color: #e4dccf;
+  cursor: pointer;
 }
 #info:hover {
   color: #f9f5eb;
@@ -159,6 +161,10 @@ body {
 #inputBox input {
   width: 100%;
   font-size: 20px;
+  cursor: text;
+}
+#inputBox input:disabled {
+  cursor: default;
 }
 
 #titleBox {
